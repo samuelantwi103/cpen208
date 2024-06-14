@@ -1,7 +1,7 @@
 import Image from "next/image";
 export default function SideNav() {
   return (
-    <div className="flex flex-col justify-between space-y-5 bg-[#93B4C1]">
+    <div className="flex p-6  md:overflow-y-auto md:p-12 flex-col justify-between space-y-5 bg-[hsl(197,27%,67%)] h-[89%]">
       <div className="flex flex-col gap-6">
         <div>Dashboard</div>
         <div>Courses</div>
