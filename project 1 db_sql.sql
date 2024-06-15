@@ -25,6 +25,13 @@ CREATE TABLE student.course_data (
     name VARCHAR(255) NOT NULL
 );
 
+-- Create the course_enrollment table
+CREATE TABLE student.course_enrollment (
+    id SERIAL PRIMARY KEY,
+    student_id VARCHAR(50) REFERENCES student.student_data(student_id),
+    course_id VARCHAR(50) REFERENCES student.course_data(course_id)
+);
+
 -- Create Student Data Table
 CREATE TABLE student.student_data (
     id SERIAL PRIMARY KEY,
@@ -241,6 +248,59 @@ VALUES
 ('11238068', 900.00),
 ('11238069', 1000.00),
 ('11238070', 2000.00);
+
+-- Populate course_enrollment table
+INSERT INTO student.course_enrollment (student_id, course_id) VALUES
+('11238011', 'SENG 102'),
+('11238012', 'SENG 104'),
+('11238013', 'SENG 106'),
+('11238014', 'SENG 108'),
+('11238015', 'SENG 112'),
+('11238016', 'CPEN 104'),
+('11238017', 'UGRC 150'),
+('11238018', 'SENG 102'),
+('11238019', 'SENG 104'),
+('11238020', 'SENG 106'),
+('11238021', 'SENG 108'),
+('11238022', 'SENG 112'),
+('11238023', 'CPEN 104'),
+('11238024', 'UGRC 150'),
+('11238025', 'SENG 102'),
+('11238026', 'SENG 104'),
+('11238027', 'SENG 106'),
+('11238028', 'SENG 108'),
+('11238029', 'SENG 112'),
+('11238030', 'CPEN 104'),
+('11238031', 'UGRC 150'),
+('11238032', 'SENG 102'),
+('11238033', 'SENG 104'),
+('11238034', 'SENG 106'),
+('11238035', 'SENG 108'),
+('11238036', 'SENG 112'),
+('11238037', 'CPEN 104'),
+('11238038', 'UGRC 150'),
+('11238039', 'SENG 102'),
+('11238040', 'SENG 104'),
+('11238041', 'SENG 106'),
+('11238042', 'SENG 108'),
+('11238043', 'SENG 112'),
+('11238044', 'CPEN 104'),
+('11238045', 'UGRC 150'),
+('11238046', 'SENG 102'),
+('11238047', 'SENG 104'),
+('11238048', 'SENG 106'),
+('11238049', 'SENG 108'),
+('11238050', 'SENG 112'),
+('11238051', 'CPEN 104'),
+('11238052', 'UGRC 150'),
+('11238053', 'SENG 102'),
+('11238054', 'SENG 104'),
+('11238055', 'SENG 106'),
+('11238056', 'SENG 108'),
+('11238057', 'SENG 112'),
+('11238058', 'CPEN 104'),
+('11238059', 'UGRC 150'),
+('11238060', 'SENG 102');
 
 -- Populate the student.course_data table
 INSERT INTO student.course_data (course_id, name)
