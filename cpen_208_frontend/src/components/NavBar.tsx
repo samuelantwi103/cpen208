@@ -9,16 +9,16 @@ const isLoginRegister = createContext(true);
 
 const NavBar = (props: Props) => {
   return (
-    <nav className="flex w-full  text-white p-4 px-40 align">
+    <nav className="flex  text-white p-4 sm:px-6 md:pl-[20vw] xl:pl-[15vw] align">
       <ul className="flex justify-between w-full text-nowrap items-center">
         
-        <li className="flex justify-between w-fit h-fit gap-3 items-center text-black">
+        <li className="flex justify-between h-fit sm:gap-3 items-center text-black">
           <Link href={"/"} className="font-semibold text-[#0A7AAA]">CPEN UG</Link>
 
-          <Link href={""} className={clsx()}>
+          <Link href={""} className={clsx("hidden sm:block")}>
             <div>About</div>
           </Link>
-          <Link href={""}>
+          <Link href={""} className="hidden sm:block">
             <div>Contact Us</div>
           </Link>
         </li>

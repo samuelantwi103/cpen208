@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className={clsx("bg-back-img bg-center bg-no-repeat bg-cover bg-fixed bg-origin-border")}>
           {/* <div className="bg-fixed blur-md bg-transparent"></div> */}
-          <div className=" backdrop-blur-sm">
+          <div className=" backdrop-blur">
             <NavBar />
 
             {children}

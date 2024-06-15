@@ -1,8 +1,14 @@
 'use client'
+import clsx from "clsx";
 import { ReactNode } from "react";
 
-export default function Card({children}:{children: ReactNode}) {
-  return <div className="w-fit bg-[#E5F4FA]">
+interface Props {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export default function Card({children, className, ...props}:Props) {
+  return <div className={clsx("w-fit bg-[#E5F4FA] p-3 rounded-lg", className)} {...props}>
     {children}
   </div>
 }

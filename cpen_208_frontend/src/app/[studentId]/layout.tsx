@@ -4,12 +4,14 @@ import { ReactNode } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="h-screen lg:max-w-[40rem] sm:max-w-[30rem] flex justify-between">
-      <div className="flex-grow">
-      <SideNav />
+    <div className="h-screen  flex justify-between">
+      <div className="hidden md:block">
+        <SideNav />
       </div>
-      <div className="w-full flex-none md:w-64">
-      {children}
+      <div className="px-5 w-full md:min-w-[75%]">
+        <div className="flex flex-col gap-10 flex-none flex-grow  h-screen overflow-hidden">
+          {children}
+        </div>
       </div>
     </div>
   );
