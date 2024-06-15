@@ -1,18 +1,19 @@
 "use client";
 import clsx from "clsx";
+import { CreditCard, LayoutDashboard, LibraryBig, Settings, User, } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const side_link = [
   [
-    { name: "Dashboard", href: "/samuel/dashboard" },
-    { name: "Courses", href: "/samuel/courses" },
-    { name: "Finances", href: "/samuel/finances" },
+    { name: "Dashboard", href: "/samuel/dashboard", icon: <LayoutDashboard /> },
+    { name: "Courses", href: "/samuel/courses", icon: <LibraryBig /> },
+    { name: "Finances", href: "/samuel/finances", icon: <CreditCard /> },
   ],
   [
-    { name: "Profile", href: "/samuel" },
-    { name: "Settings", href: "/samuel/settings" },
+    { name: "Profile", href: "/samuel", icon: <User /> },
+    { name: "Settings", href: "/samuel/settings", icon: <Settings /> },
   ],
 ];
 
@@ -26,10 +27,11 @@ export default function SideNav() {
             <Link
               href={link.href}
               key={link.name}
-              className={clsx("md:px-12 py-4", {
+              className={clsx("md:px-12 py-4 flex gap-2", {
                 "text-[#0A7AAA] bg-[#E5F4FA] ": pathname === link.href,
               })}
             >
+              <div>{link.icon}</div>
               <div>{link.name}</div>
             </Link>
           );
@@ -41,10 +43,11 @@ export default function SideNav() {
             <Link
               href={link.href}
               key={link.name}
-              className={clsx("md:px-12 py-4", {
+              className={clsx("md:px-12 py-4 flex gap-2", {
                 "text-[#0A7AAA] bg-[#E5F4FA] ": pathname === link.href,
               })}
             >
+              <div>{link.icon}</div>
               <div>{link.name}</div>
             </Link>
           );
