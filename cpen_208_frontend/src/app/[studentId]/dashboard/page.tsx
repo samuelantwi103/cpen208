@@ -57,18 +57,15 @@ const Dashboard = (props: Props) => {
       {/* Courses */}
       <div>
         <div className="font-bold text-3xl p-4 min-h-fit">Courses</div>
-        <div
-          className="flex overflow-x-scroll overflow-clip   gap-12 py-3 pb-4 bg-clip-content"
-          style={{ scrollbarWidth: "none" }}
-        >
+        <div className="flex overflow-x-scroll overflow-clip   gap-12 py-3 pb-4 bg-clip-content md:scrollbar-track-rounded-full md:scrollbar md:scrollbar-thumb-[#E5F4FA]  md:scrollbar-track-slate-300 h-[26rem]">
           {course_data.map((course) => (
             <Card
               key={course.code}
-              className="flex-grow flex flex-col p-8 justify-between rounded-3xl hover:shadow-xl hover:-translate-y-2 z-10 h-[360px]"
+              className="flex-grow flex flex-col p-8 justify-start gap-3 rounded-3xl hover:shadow-xl hover:-translate-y-2 z-10 h-[25rem] min-w-64"
             >
               <div>{course.title}</div>
               <div>{course.code}</div>
-              <div>{course.description}</div>
+              <div className="overflow-clip">{course.description}</div>
             </Card>
           ))}
         </div>

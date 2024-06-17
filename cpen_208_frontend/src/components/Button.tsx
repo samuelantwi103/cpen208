@@ -11,7 +11,7 @@ type Props = {
 const Button = ({ children, className, ...props }: Props) => {
   // Combine default styles with passed className using clsx
   const combinedClasses = clsx(
-    "bg-[#0A7AAA] px-4 py-5 rounded-full min-w-fit max-w-[8rem] min-h-[35px] text-center",
+    "bg-[#0A7AAA] px-4 py-5 rounded-full min-w-fit min-h-[35px] text-center",
     className
   );
 

@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import Input from "@/components/input";
 import React from "react";
 // import { metadata } from '../layout';
+import Link from 'next/link';
 
 type Props = {};
 export const metadata = {
@@ -12,11 +13,11 @@ export const metadata = {
 const LoginPage = (props: Props) => {
   // const
   return (
-    <div className="min-h-[100vh] lg:max-w-[40rem] sm:max-w-[30rem] ml-40">
+    <div className="min-h-[100vh] lg:max-w-[40rem] sm:max-w-[30rem] mx-4 md:ml-40">
       {/* Welcome Back Text */}
       <div
         id="Hero"
-        className="text-5xl flex font-bold items-baseline space-y-3 mb-5 w-full mt-2 "
+        className="text-3xl md:text-5xl flex text-nowrap font-bold items-end justify-start space-y-3 mb-5 w-full mt-2 "
       >
         <div>Welcome Back</div>
         <div className="text-[#0A7AAA]">.</div>
@@ -25,7 +26,7 @@ const LoginPage = (props: Props) => {
       {/* Dont have an account */}
       <div className="flex space-x-2 font-bold  w-full mt-2 mb-8 ">
         <div>Don&apos;t have an account?</div>
-        <div className="text-[#0A7AAA]">Register</div>
+        <Link href="/signup" className="text-[#0A7AAA]">Register</Link>
       </div>
       <form className="flex flex-col space-y-10" method="">
         {/* Email */}
@@ -35,7 +36,7 @@ const LoginPage = (props: Props) => {
         {/* Forgot Password */}
         <div className="text-[#0A7AAA] self-end mt-10">Forgot Password?</div>
         {/* <div className="self-center h-auto w-auto"> */}
-          <Button className="self-center min-w-[20em] text-white font-semibold text-xl">Sign In</Button>
+          <Button className="self-center w-[15rem] text-white font-semibold text-xl">Sign In</Button>
         {/* </div> */}
       </form>
     </div>
