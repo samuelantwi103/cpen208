@@ -2,10 +2,12 @@ import Card from "@/components/card";
 import React from "react";
 import Image from "next/image";
 import getData from "@/app/api/data";
+import VerifyURL from "@/utils/verifyURL";
 
 type Props = {};
 
 const Dashboard = async (props: Props) => {
+  VerifyURL
   const student_data = await getData();
   // const stud = {
   //   success: true,
@@ -46,18 +48,16 @@ const Dashboard = async (props: Props) => {
       {/* Courses */}
       <div>
         <div className="font-bold text-3xl p-4 min-h-fit">Courses</div>
-        <div className="flex overflow-x-scroll overflow-clip   gap-12 py-3 pb-4 bg-clip-content scrollbar-none md:scrollbar-track-rounded-fullmd:scrollbar-thumb-rounded-full md:scrollbar md:scrollbar-thumb-[#94b5c2]  md:scrollbar-h-10 md:scrollbar-track-transparent h-fit mb-10">
+        <div className="flex overflow-x-scroll overflow-clip  gap-12 py-3 pb-4 bg-clip-content scrollbar-none sm:scrollbar-track-rounded-full sm:scrollbar-thumb-rounded-full sm:scrollbar md:scrollbar-thumb-[#94b5c2]  h-fit">
           {student_data.data.map(
-            (
-              course: {
-                id: number;
-                course_name: string;
-                course_code: string;
-              }
-            ) => (
+            (course: {
+              id: number;
+              course_name: string;
+              course_code: string;
+            }) => (
               <Card
                 key={course.id}
-                className="flex-grow flex flex-col p-8 justify-start gap-3 rounded-3xl hover:shadow-xl hover:-translate-y-2 z-10 h-[20rem] min-w-64"
+                className="flex-grow flex flex-col p-8 justify-start gap-3 rounded-3xl hover:shadow-xl hover:-translate-y-2 h-[20rem] min-w-64"
               >
                 <div>{course.course_name}</div>
                 <div>{course.course_code}</div>
@@ -67,6 +67,22 @@ const Dashboard = async (props: Props) => {
           )}
         </div>
       </div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
+      <div>Hello</div>
     </>
   );
 };

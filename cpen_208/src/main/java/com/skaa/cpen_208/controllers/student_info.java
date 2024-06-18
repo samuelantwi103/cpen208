@@ -20,7 +20,7 @@ public class student_info {
   public student_info(student_service studentService){
     this.student_service = studentService;
   }
-  @GetMapping
+  @GetMapping("/student_data")
   public List<student_data> getStudent() {
     return student_service.getStudent();
   }

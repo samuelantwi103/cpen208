@@ -20,7 +20,7 @@ const side_link = [
 export default function SideNav() {
   const pathname = usePathname();
   return (
-    <div className="flex py-10  md:overflow-y-auto  flex-col justify-between space-y-5 bg-[hsl(197,27%,67%)] h-[91%] sticky top-0 rounded-tr-3xl">
+    <div className="flex py-10  md:overflow-y-auto flex-col justify-between space-y-5 bg-[hsl(197,27%,67%)] h-[91vh] sticky top-20 rounded-tr-3xl z-30">
       <div className={clsx("flex flex-col")}>
         {side_link[0].map((link) => {
           return (
