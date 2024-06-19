@@ -1,10 +1,9 @@
-export async function POST() {
+export async function POST(request: Request) {
   const data = {};
   const res = await fetch("", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "API-Key": process.env.DATA_API_KEY!,
     },
     body: JSON.stringify({
       course_code: "CPEN 214",
