@@ -9,16 +9,16 @@ type Props = {};
 const Dashboard = async (props: Props) => {
   VerifyURL
   const student_data = await getData();
-  // const stud = {
-  //   success: true,
-  //   // data: [
-  //   //   { id: 1, course_name: "Software Engineering", course_code: "CPEN 208" },
-  //   //   { id: 2, course_name: "Linear Cirsuits", course_code: "CPEN 204" },
-  //   //   { id: 3, course_name: "Academic Writing 2", course_code: "CBAS 210" },
-  //   //   { id: 4, course_name: "Database Design", course_code: "CPEN 204" },
-  //   //   { id: 5, course_name: "Data Structures", course_code: "CPEN 211" },
-  //   // ],
-  // };
+  const stud = {
+    success: true,
+    data: [
+      { id: 1, course_name: "Software Engineering", course_code: "CPEN 208" },
+      { id: 2, course_name: "Linear Cirsuits", course_code: "CPEN 204" },
+      { id: 3, course_name: "Academic Writing 2", course_code: "CBAS 210" },
+      { id: 4, course_name: "Database Design", course_code: "CPEN 204" },
+      { id: 5, course_name: "Data Structures", course_code: "CPEN 211" },
+    ],
+  };
   return (
     <>
       {/* Profile */}
