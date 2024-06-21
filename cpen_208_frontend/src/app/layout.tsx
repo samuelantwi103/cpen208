@@ -5,7 +5,7 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import clsx from "clsx";
 
-const inter = Inter({subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "CPEN UG",
@@ -21,12 +21,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className={clsx("bg-back-img bg-center bg-no-repeat bg-cover bg-fixed bg-origin-border")}>
+        <div
+          className={clsx(
+            "bg-back-img bg-center bg-no-repeat bg-cover bg-fixed bg-origin-border "
+          )}
+        >
           {/* <div className="bg-fixed blur-md bg-transparent"></div> */}
           <div className=" backdrop-blur">
             <NavBar />
-
-            {children}
+            <div className=" overflow-clip">{children}</div>
             {/* <Footer /> */}
           </div>
         </div>

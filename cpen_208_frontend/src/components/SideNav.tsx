@@ -29,14 +29,14 @@ export default function SideNav() {
   const pathname = usePathname();
   const { isOpen } = useStore();
   return (
-    <div className="h-full fixed">
+    
       <div
         className={clsx(
-          `md:flex pt-10 pb-5 md:overflow-y-auto flex-col justify-between space-y-5 bg-[hsl(197,27%,67%)] md:top-20 h-[calc(100vh-80px)] w-[300px] rounded-tr-3xl z-30 `,
+          `md:flex pt-10 pb-5 md:overflow-y-auto flex-col justify-between space-y-5 bg-[hsl(197,27%,67%)] h-[calc(100vh-67px)] w-[300px] rounded-tr-3xl z-30 `,
           `${
             isOpen
-              ? "transform translate-x-[0px]  left-0 md:flex md:sticky top-16 z-[400]"
-              : "transform translate-x-[0px] sticky hidden md:flex md:sticky"
+              ? " flex sticky top-16 z-[400]"
+              : "md:sticky md:flex top-16 hidden"
           }`
         )}
       >
@@ -71,7 +71,7 @@ export default function SideNav() {
                   {
                     "text-[#0A7AAA] bg-[#E5F4FA] ": pathname === link.href,
                   },
-                  `${isOpen ? "px-10" : "sticky hidden"}`
+                  `${isOpen ? "px-10" : ""}`
                 )}
               >
                 <div>{link.icon}</div>
@@ -81,6 +81,6 @@ export default function SideNav() {
           })}
         </div>
       </div>
-    </div>
+    
   );
 }
