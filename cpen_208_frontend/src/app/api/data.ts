@@ -11,13 +11,15 @@
 //   },
 // ];
 
-export default async function getData() {
-  const res = await fetch(
-    "http://localhost:8001/course_services/list_of_courses"
-  );
-  console.log("Data fetching")
-  // res.json;
-  return res.json();
-}
+// Use this to get data from API
+
+// export default async function getData() {
+//   const res = await fetch(
+//     "http://localhost:8001/course_services/list_of_courses"
+//   );
+//   console.log("Data fetching")
+//   // res.json;
+//   return res.json();
+// }
 
 // export const data = getData

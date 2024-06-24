@@ -1,15 +1,15 @@
 import Card from "@/components/card";
 import React from "react";
 import Image from "next/image";
-import getData from "@/app/api/data";
+// import getData from "@/app/api/data";
 import VerifyURL from "@/utils/verifyURL";
 
 type Props = {};
 
-const Dashboard = async (props: Props) => {
-  VerifyURL
-  const student_data = await getData();
-  const stud = {
+const Dashboard = (props: Props) => {
+  VerifyURL;
+  // const student_data = await getData();
+  const student_data = {
     success: true,
     data: [
       { id: 1, course_name: "Software Engineering", course_code: "CPEN 208" },
@@ -67,22 +67,6 @@ const Dashboard = async (props: Props) => {
           )}
         </div>
       </div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
-      <div>Hello</div>
     </>
   );
 };
