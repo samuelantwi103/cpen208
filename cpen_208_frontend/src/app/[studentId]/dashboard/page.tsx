@@ -1,7 +1,6 @@
 import Card from "@/components/card";
 import React from "react";
 import Image from "next/image";
-// import getData from "@/app/api/data";
 import VerifyURL from "@/utils/verifyURL";
 
 type Props = {};
