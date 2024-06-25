@@ -16,7 +16,7 @@ const Button = ({ children, className, ...props }: Props) => {
   );
 
   return (
-    <Link href="samuel/dashboard" scroll={false} className={combinedClasses} {...props}>
+    <Link href="samuel/dashboard"  className={combinedClasses} {...props}>
       {children}
     </Link>
   );

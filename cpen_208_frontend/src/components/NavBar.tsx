@@ -21,26 +21,26 @@ const NavBar = (props: Props) => {
           <Link
             href={"/"}
             className="font-bold text-2xl text-[#0A7AAA]"
-            scroll={false}
+            
           >
             CPEN UG
           </Link>
         </li>
         <li className="flex justify-between h-fit sm:gap-3 items-center text-black">
-          <Link href={""} className={clsx("hidden sm:block")} scroll={false}>
+          <Link href={""} className={clsx("hidden sm:block")} >
             <div>About</div>
           </Link>
-          <Link href={""} className="hidden sm:block" scroll={false}>
+          <Link href={""} className="hidden sm:block" >
             <div>Contact Us</div>
           </Link>
         </li>
         <li className="flex justify-center  w-fit  text-white gap-3">
-          <Link href={"/login"} scroll={false}>
+          <Link href={"/login"} >
             <div className="px-4 py-1 border-[#0A7AAA] text-black border-2 rounded-full min-h-[35px]">
               Log In
             </div>
           </Link>
-          <Link href={"/signup"} scroll={false}>
+          <Link href={"/signup"} >
             <div className="bg-[#0A7AAA] px-4 py-1 rounded-full min-h-[35px]">
               Register
             </div>
