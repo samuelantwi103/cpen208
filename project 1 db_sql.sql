@@ -1,3 +1,6 @@
+-- CREATING DATABASE STRUCTURE
+-----------------------------------------
+
 -- Create Database
 CREATE DATABASE comp_eng_dept;
 
@@ -82,6 +85,8 @@ CREATE TABLE student.ta_assignment (
     student_id VARCHAR(50) REFERENCES student.student_data(student_id)
 );
 
+-- CREATING DATABASE FUNCTIONS AND TRIGGERS
+-----------------------------------------
 
 -- Create Function to Calculate Outstanding Fees for a Specific Student
 CREATE OR REPLACE FUNCTION calculate_outstanding_fees(student_id_input VARCHAR)
@@ -121,6 +126,31 @@ $$ LANGUAGE plpgsql;
 
 -- Example usage
 SELECT calculate_outstanding_fees('11238012');
+
+-- Trigger Function to update Account Balance
+-- Create Trigger Function to Update Account Balance
+CREATE OR REPLACE FUNCTION update_account_balance()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Update the account balance after a payment is made
+    UPDATE student.account
+    SET account_balance = account_balance - NEW.payed_amount
+    WHERE student_id = NEW.student_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger on student.payment table
+-- Create Trigger on student.payment Table
+CREATE TRIGGER payment_after_insert
+AFTER INSERT ON student.payment
+FOR EACH ROW
+EXECUTE FUNCTION update_account_balance();
+
+
+-- INSERTING SAMPLE DATA INTO DATABASE
+------------------------------------------
 
 -- Insert Sample Data into Student Data
 INSERT INTO student.student_data (student_id, fname, lname, email, password, isTA) VALUES
