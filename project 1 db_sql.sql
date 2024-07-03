@@ -1,5 +1,5 @@
 -- CREATING DATABASE STRUCTURE
------------------------------------------
+---------------------------------
 
 -- Create Database
 CREATE DATABASE comp_eng_dept;
@@ -129,7 +129,7 @@ SELECT calculate_outstanding_fees('11238012');
 
 -- Trigger Function to update Account Balance
 -- Create Trigger Function to Update Account Balance
-CREATE OR REPLACE FUNCTION update_account_balance()
+CREATE OR REPLACE FUNCTION admin.update_account_balance()
 RETURNS TRIGGER AS $$
 BEGIN
     -- Update the account balance after a payment is made
@@ -146,7 +146,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER payment_after_insert
 AFTER INSERT ON student.payment
 FOR EACH ROW
-EXECUTE FUNCTION update_account_balance();
+EXECUTE FUNCTION admin.update_account_balance();
 
 
 -- INSERTING SAMPLE DATA INTO DATABASE
