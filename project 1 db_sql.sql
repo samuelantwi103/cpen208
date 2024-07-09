@@ -128,7 +128,6 @@ $$ LANGUAGE plpgsql;
 SELECT calculate_outstanding_fees('11238012');
 
 -- Trigger Function to update Account Balance
--- Create Trigger Function to Update Account Balance
 CREATE OR REPLACE FUNCTION admin.update_account_balance()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -148,6 +147,80 @@ AFTER INSERT ON student.payment
 FOR EACH ROW
 EXECUTE FUNCTION admin.update_account_balance();
 
+-- Create Function to Authenticate User Login
+CREATE OR REPLACE FUNCTION student.auth_student_login(
+    user_identifier VARCHAR,
+    user_password VARCHAR
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+    authenticated BOOLEAN := FALSE;
+BEGIN
+    -- Check authentication using student_id
+	SELECT FALSE INTO authenticated;
+    SELECT TRUE INTO authenticated
+    FROM student.student_data
+    WHERE (student_id = user_identifier OR email = user_identifier) AND password = user_password;
+    RETURN authenticated;
+END;
+$$ LANGUAGE plpgsql;
+
+-- USE CASE for AUTH
+SELECT student.auth_student_login('11238011','passwrd11238011')
+
+-- Function to get Details for Dashboard
+CREATE OR REPLACE FUNCTION student.dashDetails(student_id_input VARCHAR)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT JSON_BUILD_OBJECT(
+        'fname', sd.fname,
+        'lname', sd.lname,
+        'student_id', sd.student_id,
+        'account_balance', COALESCE(a.account_balance, 0)
+    ) INTO result
+    FROM student.student_data sd
+    LEFT JOIN student.account a ON sd.student_id = a.student_id
+    WHERE sd.student_id = student_id_input;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Example usage
+SELECT student.dashDetails('11238011');
+
+-- courseEnroll function to get courses enrolled
+CREATE OR REPLACE FUNCTION student.courseEnroll(student_id_input VARCHAR)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT JSON_AGG(JSON_BUILD_OBJECT(
+        'course_id', cd.course_id,
+        'course_name', cd.name,
+        'credit_hour', cd.credit_hour,
+        'staff_fname', st.fname,
+        'staff_lname', st.lname,
+        'TA_name', (SELECT CONCAT(ta.fname, ' ', ta.lname) 
+                    FROM student.student_data ta
+                    WHERE ta.student_id = t.student_id),
+        'grade', ce.grade
+    )) INTO result
+    FROM student.course_enrollment ce
+    JOIN student.course_data cd ON ce.course_id = cd.course_id
+    LEFT JOIN staff.lecture_assignment la ON la.course_id = cd.course_id
+    LEFT JOIN staff.staff_data st ON la.staff_id = st.id
+    LEFT JOIN student.ta_assignment t ON t.lecture_id = la.id
+    WHERE ce.student_id = student_id_input;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Example usage
+SELECT student.courseEnroll('11238011');
 
 -- INSERTING SAMPLE DATA INTO DATABASE
 ------------------------------------------
@@ -398,12 +471,10 @@ VALUES
 ('Kenneth', 'Broni', 'kbroni@university.edu', generate_password('Mr. Kenneth Broni'));
 
 -- Populate the lecture_assignment table
-INSERT INTO staff.lecture_assignment (staff_id, course_id)
-SELECT 
-    staff.id AS staff_id,
+UPDATE staff.lecture_assignment (staff_id, course_id)
+SELECT
     courses.course_id AS course_id
 FROM
-    (SELECT id FROM staff.staff_data) AS staff,
     (SELECT course_id FROM student.course_data ORDER BY RANDOM() LIMIT 20) AS courses;
 
 -- Verify the populated data
@@ -432,3 +503,36 @@ VALUES
 (55, '11238037'),
 (119, '11238038');
 
+
+
+
+
+-- Dummy SQL
+CREATE OR REPLACE FUNCTION student.add_courses(
+	json_request text)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE 
+    json_result_obj TEXT DEFAULT '';
+	vr_course_code TEXT DEfault '';
+	vr_course_name TEXT DEFAULT '';
+BEGIN
+-- 	{"course_code": "CPEN211", "course_name": "Database"}
+	vr_course_code := json_request::json ->> 'course_code';
+	vr_course_name := json_request::json ->> 'course_name';
+--       json_result_obj= json_build_object('success',true,'data',array_to_json(array_agg(row_to_json(t))));
+ insert into ses.courses(course_code, course_name)
+ values(vr_course_code,vr_course_name);
+ return 'Course Saved Successfully';
+-- IF  json_result_obj IS NULL THEN
+--      json_result_obj = json_build_object('success',false,'msg','Error Loading Data');
+-- END IF;
+--   RETURN json_result_obj;
+END;
+$BODY$;
+
+ALTER FUNCTION ses.add_courses(text)
+    OWNER TO postgres;

@@ -1,17 +1,22 @@
-// "Use Route";
+"use client"
 import Button from "@/components/Button";
 import Input from "@/components/input";
-import React from "react";
+import React, { useState } from "react";
 // import { metadata } from '../layout';
 import Link from 'next/link';
 
 type Props = {};
-export const metadata = {
-  title: "Log In | CPEN UG",
-};
+// // 'use server'
+// export const metadata = {
+//   title: "Log In | CPEN UG",
+// };
 
 const LoginPage = (props: Props) => {
-  // const
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+  const [error, seterror] = useState('');
+
+
   return (
     <div className="min-h-[100vh] lg:max-w-[40rem] sm:max-w-[30rem] mx-4 md:ml-40">
       {/* Welcome Back Text */}
@@ -44,3 +49,4 @@ const LoginPage = (props: Props) => {
 };
 
 export default LoginPage;
+

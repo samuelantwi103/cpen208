@@ -8,7 +8,7 @@ public class Cpen208Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Cpen208Application.class, args);
-		System.out.println("Hello world");
+		System.out.println("API Operational");
 	}
 
 }
