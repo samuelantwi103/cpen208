@@ -507,32 +507,32 @@ VALUES
 
 
 
--- Dummy SQL
-CREATE OR REPLACE FUNCTION student.add_courses(
-	json_request text)
-    RETURNS text
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-DECLARE 
-    json_result_obj TEXT DEFAULT '';
-	vr_course_code TEXT DEfault '';
-	vr_course_name TEXT DEFAULT '';
-BEGIN
--- 	{"course_code": "CPEN211", "course_name": "Database"}
-	vr_course_code := json_request::json ->> 'course_code';
-	vr_course_name := json_request::json ->> 'course_name';
---       json_result_obj= json_build_object('success',true,'data',array_to_json(array_agg(row_to_json(t))));
- insert into ses.courses(course_code, course_name)
- values(vr_course_code,vr_course_name);
- return 'Course Saved Successfully';
--- IF  json_result_obj IS NULL THEN
---      json_result_obj = json_build_object('success',false,'msg','Error Loading Data');
--- END IF;
---   RETURN json_result_obj;
-END;
-$BODY$;
+-- -- Dummy SQL
+-- CREATE OR REPLACE FUNCTION student.add_courses(
+-- 	json_request text)
+--     RETURNS text
+--     LANGUAGE 'plpgsql'
+--     COST 100
+--     VOLATILE PARALLEL UNSAFE
+-- AS $BODY$
+-- DECLARE 
+--     json_result_obj TEXT DEFAULT '';
+-- 	vr_course_code TEXT DEfault '';
+-- 	vr_course_name TEXT DEFAULT '';
+-- BEGIN
+-- -- 	{"course_code": "CPEN211", "course_name": "Database"}
+-- 	vr_course_code := json_request::json ->> 'course_code';
+-- 	vr_course_name := json_request::json ->> 'course_name';
+-- --       json_result_obj= json_build_object('success',true,'data',array_to_json(array_agg(row_to_json(t))));
+--  insert into ses.courses(course_code, course_name)
+--  values(vr_course_code,vr_course_name);
+--  return 'Course Saved Successfully';
+-- -- IF  json_result_obj IS NULL THEN
+-- --      json_result_obj = json_build_object('success',false,'msg','Error Loading Data');
+-- -- END IF;
+-- --   RETURN json_result_obj;
+-- END;
+-- $BODY$;
 
-ALTER FUNCTION ses.add_courses(text)
-    OWNER TO postgres;
+-- ALTER FUNCTION ses.add_courses(text)
+--     OWNER TO postgres;
