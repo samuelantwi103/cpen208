@@ -2,91 +2,130 @@
 ---------------------------------
 
 -- Create Database
-CREATE DATABASE comp_eng_dept;
+CREATE DATABASE COMP_ENG_DEPT;
 
 -- Connect to the Database
-\c comp_eng_dept;
+\C COMP_ENG_DEPT;
 
 -- Create Schemas
-CREATE SCHEMA admin;
-CREATE SCHEMA student;
-CREATE SCHEMA staff;
+CREATE SCHEMA ADMIN;
+
+CREATE SCHEMA STUDENT;
+
+CREATE SCHEMA STAFF;
 
 -- Create Admin Data Table
-CREATE TABLE admin.admin_data (
-    id SERIAL PRIMARY KEY,
-    fname VARCHAR(255) NOT NULL,
-	lname VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
+CREATE TABLE ADMIN.ADMIN_DATA (
+    ID SERIAL PRIMARY KEY,
+    FNAME VARCHAR(255) NOT NULL,
+    LNAME VARCHAR(255) NOT NULL,
+    EMAIL VARCHAR(255) UNIQUE NOT NULL,
+    PASSWORD VARCHAR(255) NOT NULL
 );
 
 -- Create Course Data Table
-CREATE TABLE student.course_data (
-    id SERIAL PRIMARY KEY,
-    course_id VARCHAR(50) UNIQUE NOT NULL,
-    name VARCHAR(255) NOT NULL
+CREATE TABLE STUDENT.COURSE_DATA (
+    ID SERIAL PRIMARY KEY,
+    COURSE_ID VARCHAR(50) UNIQUE NOT NULL,
+    NAME VARCHAR(255) NOT NULL
 );
 
 -- Create the course_enrollment table
-CREATE TABLE student.course_enrollment (
-    id SERIAL PRIMARY KEY,
-    student_id VARCHAR(50) REFERENCES student.student_data(student_id),
-    course_id VARCHAR(50) REFERENCES student.course_data(course_id)
+CREATE TABLE STUDENT.COURSE_ENROLLMENT (
+    ID SERIAL PRIMARY KEY,
+    STUDENT_ID VARCHAR(50) REFERENCES STUDENT.STUDENT_DATA(STUDENT_ID),
+    COURSE_ID VARCHAR(50) REFERENCES STUDENT.COURSE_DATA(COURSE_ID)
 );
 
 -- Create Student Data Table
-CREATE TABLE student.student_data (
-    id SERIAL PRIMARY KEY,
-    student_id VARCHAR(50) UNIQUE NOT NULL,
-    fname VARCHAR(255) NOT NULL,
-	lname VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    isTA BOOLEAN DEFAULT FALSE
+CREATE TABLE STUDENT.STUDENT_DATA (
+    ID SERIAL PRIMARY KEY,
+    STUDENT_ID VARCHAR(50) UNIQUE NOT NULL,
+    FNAME VARCHAR(255) NOT NULL,
+    LNAME VARCHAR(255) NOT NULL,
+    EMAIL VARCHAR(255) UNIQUE NOT NULL,
+    PASSWORD VARCHAR(255) NOT NULL,
+    ISTA BOOLEAN DEFAULT FALSE
 );
 
 -- Create Payment Table
-CREATE TABLE student.payment (
-    id SERIAL PRIMARY KEY,
-    student_id VARCHAR(50) REFERENCES student.student_data(student_id),
-    payed_amount DECIMAL(10, 2) NOT NULL,
-    date DATE NOT NULL
+CREATE TABLE STUDENT.PAYMENT (
+    ID SERIAL PRIMARY KEY,
+    STUDENT_ID VARCHAR(50) REFERENCES STUDENT.STUDENT_DATA(STUDENT_ID),
+    PAYED_AMOUNT DECIMAL(10, 2) NOT NULL,
+    DATE DATE NOT NULL
 );
 
 -- Create Account Table
-CREATE TABLE student.account (
-    id SERIAL PRIMARY KEY,
-    student_id VARCHAR(50) REFERENCES student.student_data(student_id),
-    account_balance DECIMAL(10, 2) NOT NULL
+CREATE TABLE STUDENT.ACCOUNT (
+    ID SERIAL PRIMARY KEY,
+    STUDENT_ID VARCHAR(50) REFERENCES STUDENT.STUDENT_DATA(STUDENT_ID),
+    ACCOUNT_BALANCE DECIMAL(10, 2) NOT NULL
 );
 
 -- Create Staff Data Table
-CREATE TABLE staff.staff_data (
-    id SERIAL PRIMARY KEY,
-    fname VARCHAR(255) NOT NULL,
-	lname VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
+CREATE TABLE STAFF.STAFF_DATA (
+    ID SERIAL PRIMARY KEY,
+    FNAME VARCHAR(255) NOT NULL,
+    LNAME VARCHAR(255) NOT NULL,
+    EMAIL VARCHAR(255) UNIQUE NOT NULL,
+    PASSWORD VARCHAR(255) NOT NULL
 );
 
 -- Create Lecture Assignment Table
-CREATE TABLE staff.lecture_assignment (
-    id SERIAL PRIMARY KEY,
-    staff_id INTEGER REFERENCES staff.staff_data(id),
-    course_id VARCHAR(50) REFERENCES student.course_data(course_id)
+CREATE TABLE STAFF.LECTURE_ASSIGNMENT (
+    ID SERIAL PRIMARY KEY,
+    STAFF_ID INTEGER REFERENCES STAFF.STAFF_DATA(ID),
+    COURSE_ID VARCHAR(50) REFERENCES STUDENT.COURSE_DATA(COURSE_ID)
 );
 
 -- DROP TABLE IF EXISTS student.ta_assignment;
 -- Create TA Assignment Table
-CREATE TABLE student.ta_assignment (
-    id SERIAL PRIMARY KEY,
-    lecture_id INTEGER REFERENCES staff.lecture_assignment(id),
-    student_id VARCHAR(50) REFERENCES student.student_data(student_id)
+CREATE TABLE STUDENT.TA_ASSIGNMENT (
+    ID SERIAL PRIMARY KEY,
+    LECTURE_ID INTEGER REFERENCES STAFF.LECTURE_ASSIGNMENT(ID),
+    STUDENT_ID VARCHAR(50) REFERENCES STUDENT.STUDENT_DATA(STUDENT_ID)
 );
 
 -- CREATING DATABASE FUNCTIONS AND TRIGGERS
 -----------------------------------------
+
+-- TRIGGER TO ASSIGN GRADES BASED ON MARKS
+CREATE OR REPLACE FUNCTION set_grade()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.marks >= 80 THEN
+        NEW.grade := 'A+';
+    ELSIF NEW.marks >= 75 THEN
+        NEW.grade := 'A';
+    ELSIF NEW.marks >= 70 THEN
+        NEW.grade := 'B+';
+    ELSIF NEW.marks >= 65 THEN
+        NEW.grade := 'B';
+    ELSIF NEW.marks >= 60 THEN
+        NEW.grade := 'C+';
+    ELSIF NEW.marks >= 55 THEN
+        NEW.grade := 'C';
+    ELSIF NEW.marks >= 50 THEN
+        NEW.grade := 'D+';
+    ELSIF NEW.marks >= 45 THEN
+        NEW.grade := 'D';
+    ELSIF NEW.marks >= 40 THEN
+        NEW.grade := 'E';
+    ELSE
+        NEW.grade := 'F';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER grade_trigger
+BEFORE INSERT OR UPDATE ON student.course_enrollment
+FOR EACH ROW
+EXECUTE FUNCTION set_grade();
+
+
 
 -- Create Function to Calculate Outstanding Fees for a Specific Student
 CREATE OR REPLACE FUNCTION calculate_outstanding_fees(student_id_input VARCHAR)
@@ -210,7 +249,7 @@ BEGIN
     )) INTO result
     FROM student.course_enrollment ce
     JOIN student.course_data cd ON ce.course_id = cd.course_id
-    LEFT JOIN staff.lecture_assignment la ON la.course_id = cd.course_id
+    LEFT JOIN staff.lecture_assignment la ON la.course_id = ce.id
     LEFT JOIN staff.staff_data st ON la.staff_id = st.id
     LEFT JOIN student.ta_assignment t ON t.lecture_id = la.id
     WHERE ce.student_id = student_id_input;
@@ -221,6 +260,167 @@ $$ LANGUAGE plpgsql;
 
 -- Example usage
 SELECT student.courseEnroll('11238011');
+
+-- FUNCTION TO CHECK TA STATUS
+CREATE OR REPLACE FUNCTION student.isTA(student_id VARCHAR)
+RETURNS BOOLEAN AS $$
+DECLARE
+    is_ta BOOLEAN;
+BEGIN
+    SELECT EXISTS(SELECT 1 FROM student.student_data WHERE student.student_data.student_id = sid) INTO is_ta;
+    RETURN is_ta;
+END;
+$$ LANGUAGE plpgsql;
+-- USE CASE
+SELECT student.isTA("11238011");
+
+-- FUNCTION TO GET CLASSLIST
+CREATE OR REPLACE FUNCTION staff.getClasslist(lecture_assignment_id INT)
+RETURNS JSON AS $$
+BEGIN
+    RETURN (
+SELECT json_build_object(
+            'course_data', json_build_object(
+                'course_code', c.course_id,
+                'course_name', c.name
+            ),
+            'lecturer_data', json_build_object(
+                'fname', l.fname,
+                'lname', l.lname,
+                'email', l.email
+            ),
+            'ta_data', json_agg(
+                json_build_object(
+                    'id', s.student_id,
+                    'fname', s.fname,
+                    'lname', s.lname,
+                    'email', s.email
+                )
+            ),
+            'student_data', (SELECT json_agg(
+                 json_build_object(
+                    'fname', st.fname,
+                    'lname', st.lname,
+                    'student_id', st.student_id,
+                    'email', st.email
+                )
+	)
+	FROM student.course_enrollment ce
+        JOIN student.student_data st ON ce.student_id = st.student_id
+        JOIN staff.lecture_assignment la ON ce.id = la.id
+        -- JOIN student.course_data c ON ce.course_id = c.course_id
+        -- JOIN staff.staff_data l ON la.staff_id = l.id
+        -- LEFT JOIN student.ta_assignment ta ON la.id = ta.lecture_id
+        -- LEFT JOIN student.student_data s ON ta.student_id = s.student_id
+        WHERE la.id = 138
+	GROUP BY st.fname, st.lname, st.student_id, st.email)
+            )
+        FROM student.course_enrollment ce
+        -- JOIN student.student_data st ON ce.student_id = st.student_id
+        JOIN staff.lecture_assignment la ON ce.id = la.id
+        JOIN student.course_data c ON ce.course_id = c.course_id
+        JOIN staff.staff_data l ON la.staff_id = l.id
+        LEFT JOIN student.ta_assignment ta ON la.id = ta.lecture_id
+        LEFT JOIN student.student_data s ON ta.student_id = s.student_id
+        WHERE la.id = 138
+GROUP BY c.course_id, c.name, l.fname, l.lname, l.email
+);
+END;
+$$ LANGUAGE plpgsql;
+-- USE CASE
+SELECT staff.getClasslist(138);
+
+-- STAFF AUTHENTICATION
+DROP FUNCTION staff.auth_staff_login(VARCHAR, VARCHAR);
+CREATE OR REPLACE FUNCTION staff.auth_staff_login(semail VARCHAR, spassword VARCHAR)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN EXISTS (SELECT 1 FROM staff.staff_data
+        WHERE staff_data.email = semail
+        AND staff_data.password = spassword
+    );
+END;
+$$ LANGUAGE plpgsql;
+-- USE CASE
+SELECT staff.auth_staff_login('gmills@university.edu','Dr. ills1771');
+
+-- GET DASHBOARD DETAILS
+CREATE OR REPLACE FUNCTION staff.dashDetails(sid INT)
+RETURNS JSON AS $$
+BEGIN
+    RETURN (
+        SELECT json_build_object(
+            'id', s.id,
+            'fname', s.fname,
+            'lname', s.lname,
+            'email', s.email,
+            'courses', json_agg(
+                json_build_object(
+                    'course_code', cd.course_id,
+                    'course_name', cd.name
+                  -- 'students', json_build_array(
+                  --       json_build_object(
+                  --           'fname', st.fname,
+                  --           'lname', st.lname,
+                  --           'student_id', st.student_id,
+                  --           'email', st.email
+                  --       )
+                  --   )  
+                )
+            )
+        )
+        FROM staff.staff_data s
+        JOIN staff.lecture_assignment la ON s.id = la.staff_id
+        JOIN student.course_enrollment ce ON la.id = ce.id
+        JOIN student.course_data cd ON ce.course_id = cd.course_id
+        -- JOIN student.student_data st ON ce.student_id = st.student_id
+        WHERE s.id = sid
+GROUP BY s.id, s.fname, s.lname, s.email
+    );
+END;
+$$ LANGUAGE plpgsql;
+-- USE CASE
+SELECT staff.dashDetails(1);
+
+-- ADD STUDENT MARKS
+CREATE OR REPLACE FUNCTION staff.addGrade(lecture_assignment_id INT, s_id VARCHAR, s_marks INT)
+RETURNS TEXT AS $$
+BEGIN
+    UPDATE student.course_enrollment
+    SET marks = s_marks
+    WHERE id = lecture_assignment_id
+    AND student_id = s_id;
+	return 'Graded Successfully';
+END;
+$$ LANGUAGE plpgsql;
+-- USE CASE
+SELECT * FROM staff.addGrade(138, '11238048', 80);
+
+-- ADD COURSES TO DATABASE
+CREATE OR REPLACE FUNCTION admin.addCourse(course_code TEXT, course_name TEXT, chour INT)
+RETURNS TEXT AS $$
+BEGIN
+    INSERT INTO student.course_data (course_id, name, credit_hour)
+    VALUES (course_code, course_name, chour);
+	RETURN 'COURSE ADDED SUCCESSFULLY';
+END;
+$$ LANGUAGE plpgsql;
+-- USE CASE
+SELECT * FROM admin.addCourse('CPEN 301', 'Numerical Methods', 4);
+
+-- DELETE COURSE STORED IN DATABASE
+CREATE OR REPLACE FUNCTION admin.deleteCourse(course_code TEXT)
+RETURNS TEXT AS $$
+BEGIN
+    DELETE FROM student.course_data
+    WHERE course_id=course_code;
+	RETURN 'COURSE REMOVED SUCCESSFULLY';
+END;
+$$ LANGUAGE plpgsql;
+-- USE CASE
+SELECT * FROM admin.deleteCourse('CPEN 301');
+
+
 
 -- INSERTING SAMPLE DATA INTO DATABASE
 ------------------------------------------
@@ -507,7 +707,7 @@ VALUES
 
 
 
--- -- Dummy SQL
+-- -- Dummy SQL FOR REFERENCE
 -- CREATE OR REPLACE FUNCTION student.add_courses(
 -- 	json_request text)
 --     RETURNS text
